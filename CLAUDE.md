@@ -68,6 +68,7 @@ because of a specific finding, and the reasoning is in the code comments.
 10. **The week is a fixed pace set by the parent.** Mastery gates ordering and repetition; the week gates overall progress. Purely self-paced mastery learning is the version the evidence says works least well.
 11. **`teach` rung answers move the ladder but not the belief.** Copying a worked answer is a reading check.
 12. **Extended writing is out of scope.** Nothing grades a ten-year-old's composition reliably.
+13. **Video is offered, never imposed and never a punishment.** It appears on the "something new" card and stays available while she is on that objective. It is not triggered by a wrong answer or a failed gate, because video arriving when she fails teaches her what video means.
 
 ## After it is in daily use
 

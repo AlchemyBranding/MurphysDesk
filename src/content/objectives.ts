@@ -37,6 +37,12 @@ export const OBJECTIVES: Objective[] = [
       'face-value': 'That is the digit itself, not what it is worth. Which column is it sitting in?',
       'off-by-one-column': 'One column out. Count them again from the right.',
     },
+    video: {
+      url: 'https://www.thenational.academy/pupils/programmes/maths-primary-year-6/units/order-compare-and-calculate-with-numbers-up-to-8-digits/lessons/determine-the-value-of-digits-in-numbers-up-to-10-million/video',
+      title: 'Determine the value of digits in numbers up to 10 million',
+      year: 'Year 6',
+      why: 'Place value charts, so the columns are a structure rather than a rule to remember.',
+    },
   },
   {
     id: 'M.PV.ROUND',
@@ -80,6 +86,12 @@ export const OBJECTIVES: Objective[] = [
       'ignored-sign': 'You worked with the sizes and dropped the minus sign.',
       'subtracted-magnitudes': 'You took one size away from the other. Try counting along a number line through zero.',
     },
+    video: {
+      url: 'https://www.thenational.academy/pupils/programmes/maths-primary-year-5/units/negative-numbers/lessons/identify-and-place-negative-numbers-on-a-number-line/video',
+      title: 'Identify and place negative numbers on a number line',
+      year: 'Year 5',
+      why: 'Counting through zero, on a line, rather than as a sign stuck on the front of a number.',
+    },
   },
 
   // ------------------------------------------------------------ decimals
@@ -111,6 +123,12 @@ export const OBJECTIVES: Objective[] = [
       'add-zeros': 'Adding a zero on the end only works for whole numbers, and even then it is the wrong way to think about it.',
       'wrong-direction': 'That went the wrong way. Multiplying makes it bigger.',
       'wrong-magnitude': 'Right idea, wrong number of columns.',
+    },
+    video: {
+      url: 'https://www.thenational.academy/pupils/programmes/maths-primary-year-5/units/calculating-with-decimal-fractions/lessons/explain-how-to-multiply-and-divide-a-number-by-10-100-and-1-000/video',
+      title: 'Explain how to multiply and divide a number by 10, 100 and 1,000',
+      year: 'Year 5',
+      why: 'Why the digits move and the decimal point stays put. The wrong version of this rule survives into secondary.',
     },
   },
 
@@ -157,6 +175,12 @@ export const OBJECTIVES: Objective[] = [
       'one-is-prime': '1 has only one factor, so it does not qualify. A prime needs exactly two.',
       'odd-means-prime': 'Not every odd number is prime. 9, 15 and 21 are all odd and all have other factors.',
     },
+    video: {
+      url: 'https://www.thenational.academy/pupils/programmes/maths-primary-year-5/units/understand-and-use-the-concept-of-factorisation-square-and-prime-numbers/lessons/explain-how-to-identify-a-prime-number-or-a-composite-number/video',
+      title: 'Explain how to identify a prime number or a composite number',
+      year: 'Year 5',
+      why: 'Prime defined by the whole factor list, which is what makes 1 and 2 behave the way they do.',
+    },
   },
 
   // ------------------------------------------------------------ fractions
@@ -173,6 +197,12 @@ export const OBJECTIVES: Objective[] = [
       'not-simplified': 'Correct value, but it will go further. What divides into both the top and the bottom?',
       'subtract-not-divide': 'You took the same amount off the top and bottom. That changes the value. You have to divide.',
       'one-side-only': 'Whatever you do to the top you must do to the bottom.',
+    },
+    video: {
+      url: 'https://www.thenational.academy/pupils/programmes/maths-primary-year-6/units/addition-and-subtraction-of-fractions/lessons/explain-how-to-write-a-fraction-in-its-simplest-form/video',
+      title: 'Explain how to write a fraction in its simplest form',
+      year: 'Year 6',
+      why: 'Why the value does not change when both numbers do.',
     },
   },
   {
@@ -218,6 +248,12 @@ export const OBJECTIVES: Objective[] = [
       'kept-first-denominator': 'You kept the first bottom number instead of finding a common one.',
       'not-simplified': 'Right value, but it will simplify further.',
     },
+    video: {
+      url: 'https://www.thenational.academy/pupils/programmes/maths-primary-year-6/units/addition-and-subtraction-of-fractions/lessons/add-and-subtract-non-related-fractions-with-different-denominators/video',
+      title: 'Add and subtract non-related fractions with different denominators',
+      year: 'Year 6',
+      why: 'Why a common denominator is needed first, rather than a step somebody insists on.',
+    },
   },
   {
     id: 'M.FR.MIXED',
@@ -247,6 +283,12 @@ export const OBJECTIVES: Objective[] = [
       'added-instead': 'You added instead of multiplying.',
       'not-simplified': 'Right value, but it will go further.',
     },
+    video: {
+      url: 'https://www.thenational.academy/pupils/programmes/maths-primary-year-6/units/multiplication-and-division-of-fractions/lessons/explain-how-to-multiply-two-unit-fractions/video',
+      title: 'Explain how to multiply two unit fractions',
+      year: 'Year 6',
+      why: 'Why multiplying can make the answer smaller. This one is worth watching twice.',
+    },
   },
   {
     id: 'M.FR.DIV',
@@ -260,6 +302,12 @@ export const OBJECTIVES: Objective[] = [
     misconceptions: {
       'divided-numerator': 'You divided the top. Sharing makes the pieces smaller, so it is the bottom that changes.',
       'multiplied-instead': 'You multiplied. Dividing by a whole number makes it smaller.',
+    },
+    video: {
+      url: 'https://www.thenational.academy/pupils/programmes/maths-primary-year-6/units/multiplication-and-division-of-fractions/lessons/explain-how-to-divide-a-unit-fraction-by-a-whole-number/video',
+      title: 'Explain how to divide a unit fraction by a whole number',
+      year: 'Year 6',
+      why: 'Sharing a fraction, shown as a picture before it is shown as a rule.',
     },
   },
 
@@ -321,6 +369,12 @@ export const OBJECTIVES: Objective[] = [
       'decimal-point-shift': 'The point moved the wrong number of places. Per cent means out of a hundred.',
       'literal-digits': 'You read the digits straight across. 1/2 is not 0.12.',
     },
+    video: {
+      url: 'https://www.thenational.academy/pupils/programmes/maths-primary-year-6/units/understanding-percentages/lessons/explain-how-to-convert-percentages-to-decimals-and-fractions-with-a-denominator-of-100/video',
+      title: 'Explain how to convert percentages to decimals and fractions with a denominator of 100',
+      year: 'Year 6',
+      why: 'That the three are one idea written three ways, not three topics.',
+    },
   },
   {
     id: 'M.PCT.OF',
@@ -348,6 +402,12 @@ export const OBJECTIVES: Objective[] = [
     misconceptions: {
       'additive-comparison': 'You added the difference instead of scaling. Ask how many times bigger, not how much bigger.',
       'inverted-ratio': 'The ratio went the wrong way round.',
+    },
+    video: {
+      url: 'https://www.thenational.academy/pupils/programmes/maths-primary-year-6/units/ratio-and-proportion/lessons/describe-the-relationship-between-two-factors-in-a-ratio-context/video',
+      title: 'Describe the relationship between two factors in a ratio context',
+      year: 'Year 6',
+      why: 'What a ratio is describing before anything gets calculated.',
     },
   },
 
@@ -394,6 +454,12 @@ export const OBJECTIVES: Objective[] = [
       'main-clause-picked': 'That is the main clause. The relative clause is the part adding detail about the noun.',
       'wrong-pronoun': 'Who is for people, which is for things, whose shows belonging.',
     },
+    video: {
+      url: 'https://www.thenational.academy/pupils/programmes/english-primary-year-4/units/simple-compound-adverbial-and-relative-complex-sentences/lessons/a-new-subordinate-clause-the-relative-clause/video',
+      title: 'A new subordinate clause: the relative clause',
+      year: 'Year 4',
+      why: 'The clearest explanation of what a relative clause is. Oak introduces it in Year 4; the idea is the same.',
+    },
   },
   {
     id: 'E.GR.CLAUSE',
@@ -421,6 +487,12 @@ export const OBJECTIVES: Objective[] = [
       'past-tense-confusion': 'Passive is not the same as past tense. "Was bitten" is passive, "bit" is just past.',
       'subject-object-swap': 'In the passive, the thing having it done to it goes first.',
       'agent-still-there': 'That one is passive, but it still tells you who did it.',
+    },
+    video: {
+      url: 'https://www.thenational.academy/pupils/programmes/english-primary-year-6/units/three-tense-forms-modality-active-voice-and-passive-voice/lessons/identifying-the-active-and-passive-voice/video',
+      title: 'Identifying the active and passive voice',
+      year: 'Year 6',
+      why: 'What the passive is for, which is the part that makes it stick.',
     },
   },
   {

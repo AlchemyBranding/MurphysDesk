@@ -67,6 +67,28 @@ export interface Objective {
   /** The fixed weekly pace. Mastery gates ordering; this gates overall progress. */
   week: number;
   misconceptions: Record<string, string>;
+  /**
+   * An optional explanation video, for the objectives where the procedure only
+   * makes sense once the concept underneath it does. Offered on the "something
+   * new" card and available again from the session header. Never during a
+   * question, and never as a consequence of getting something wrong.
+   *
+   * Oak National Academy, Open Government Licence v3.0. Their video is served
+   * from Mux with a signed playback policy, so it cannot be embedded without an
+   * Oak API key; this opens their page in a new tab instead. If a key is ever
+   * obtained, only this type and ObjectiveVideoCard need to change.
+   */
+  video?: ObjectiveVideo;
+}
+
+export interface ObjectiveVideo {
+  /** Verified pupil facing lesson page. Every one of these was fetched, not guessed. */
+  url: string;
+  title: string;
+  /** Oak sequences some of these below Year 6. Shown so nobody is surprised. */
+  year: string;
+  /** What the video adds that the worked examples do not. */
+  why: string;
 }
 
 // ---------------------------------------------------------------- marking

@@ -15,6 +15,7 @@ import {
   type Step,
 } from '@/lib/session';
 import Item from './Item';
+import { VideoOffer, VideoAgain } from './ObjectiveVideoCard';
 
 const TARGET_ITEMS = 18; // roughly fifteen minutes. Hard capped, with no "just one more".
 
@@ -326,6 +327,7 @@ export default function Session({ profile, onDone }: { profile: Profile; onDone:
         <span className="lbl">Something new</span>
         <h2>{objective.title}</h2>
         <p style={{ fontSize: '1.05rem' }}>{objective.teach}</p>
+        {objective.video ? <VideoOffer video={objective.video} /> : null}
         <button className="btn" onClick={() => setShowIntro(false)} autoFocus>
           Right, got it
         </button>
@@ -339,6 +341,7 @@ export default function Session({ profile, onDone }: { profile: Profile; onDone:
         <i style={{ width: `${Math.min(100, (done / TARGET_ITEMS) * 100)}%` }} />
       </div>
       <div className="spacer" />
+      {objective.video ? <VideoAgain video={objective.video} /> : null}
       <Item
         key={`${step.templateId}-${step.seed}`}
         item={item}

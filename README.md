@@ -163,6 +163,7 @@ the dashboard.
 
 - **Objectives**: England Year 6 programmes of study and the DfE ready-to-progress criteria, both Open Government Licence v3.0. Wales publishes no content list, so this is the only granular, testable specification available anywhere in the UK.
 - **The Year 5/6 spelling word list**: English Appendix 1, OGL. Wales publishes no word list at all, which makes it one of the clearest gaps against what an English secondary assumes.
+- **The explanation videos**: Oak National Academy, Open Government Licence v3.0, on the twelve objectives where the procedure only holds up once the concept underneath it does. Attribution is a licence condition and stays on the card. Oak serve video from Mux under a signed playback policy, so these open Oak's own page in a new tab rather than embedding; embedding would need an Oak API key.
 - **Everything else** was written for this app.
 
 ---
@@ -173,4 +174,5 @@ the dashboard.
 2. **The teach rungs do not move the belief estimate**, only the ladder. Copying a worked answer is a reading check, not evidence of knowing something.
 3. **A gate measures performance, not learning.** Those come apart. The app says "she can do this today" at the gate and only earns the wall card there; the delayed retention checks are what actually confirm it a month later.
 4. **The spelling test needs speech synthesis.** Where it is unavailable the note gives the first letter and the length, which is weaker.
-5. **English here is mechanics only**: spelling, punctuation, grammar. Composition is not in scope and should not be.
+5. **The videos are a link away, not in the app.** Oak's playback is signed, so she leaves the session to watch one. That is a real hole in the design, and the fix is an Oak API key.
+6. **English here is mechanics only**: spelling, punctuation, grammar. Composition is not in scope and should not be.
