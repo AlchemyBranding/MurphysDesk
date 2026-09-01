@@ -6,31 +6,35 @@
 // should not need one. The secret is the ?k= token in the URL: anyone holding
 // the link can tick the board, which is the correct trade-off for a tick sheet
 // on a family fridge and the wrong one for anything else. Nothing personal is
-// stored here beyond ten booleans a week.
+// stored here beyond a handful of booleans a week.
 //
 // The rules this page enforces, all of them deliberate:
 //   - five sessions carry the week, flat. Nothing is scaled to how well she did
-//   - the mornings are shown because they happen, not because they earn anything
+//   - piano and Rock Stars are tickable but earn nothing. They are a habit
 //   - the run of past weeks only ever grows. Nothing already earned comes off
 //   - no streak, no score, no total, no comparison to anyone
+//   - the week rolls over on its own every Monday. Nothing to reset
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
 const SESSIONS = [
-  { day: 'Monday', when: 'after school', what: 'CENTURY' },
-  { day: 'Tuesday', when: 'after piano', what: 'CENTURY' },
-  { day: 'Wednesday', when: 'after school', what: 'CENTURY' },
-  { day: 'Weekend', when: 'your pick of day', what: 'CENTURY' },
-  { day: 'Weekend', when: 'the other day', what: 'Money and thinking' },
+  { day: 'Mon', when: 'after school', what: 'CENTURY', hue: 'a' },
+  { day: 'Tue', when: 'after piano', what: 'CENTURY', hue: 'b' },
+  { day: 'Wed', when: 'after school', what: 'CENTURY', hue: 'c' },
+  { day: 'Sat', when: 'or Sunday', what: 'CENTURY', hue: 'd' },
+  { day: 'Sun', when: 'with Dad', what: 'Money and thinking', hue: 'e' },
 ];
-const MORNINGS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 const FIVE = [false, false, false, false, false];
+
+type Strand = 'sessions' | 'piano' | 'ttrs';
 
 interface WeekRow {
   week_start: string;
   sessions: boolean[];
-  mornings: boolean[];
+  piano: boolean[];
+  ttrs: boolean[];
 }
 
 function mondayOf(d: Date): string {
@@ -47,15 +51,52 @@ function pretty(isoDate: string, addDays = 0): string {
 function five(v: unknown): boolean[] {
   return Array.isArray(v) && v.length === 5 ? v.map(Boolean) : [...FIVE];
 }
+function blank(week: string): WeekRow {
+  return { week_start: week, sessions: [...FIVE], piano: [...FIVE], ttrs: [...FIVE] };
+}
+
+const HELLOS = [
+  'Right then.',
+  'Morning.',
+  'Here we go.',
+  'What is left?',
+  'Good to see you.',
+];
 
 export default function Board() {
   const [token, setToken] = useState<string | null>(null);
   const [rows, setRows] = useState<WeekRow[]>([]);
+  const [thisWeek, setThisWeek] = useState<string>(() => mondayOf(new Date()));
   const [loading, setLoading] = useState(true);
-  const [note, setNote] = useState<string>('');
+  const [note, setNote] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const thisWeek = useMemo(() => mondayOf(new Date()), []);
+  const hello = useMemo(() => HELLOS[new Date().getDay() % HELLOS.length], []);
+  const todayIdx = useMemo(() => {
+    const d = new Date().getDay();
+    return d === 0 ? 6 : d - 1;
+  }, []);
+
+  const load = useCallback(async (k: string, week: string) => {
+    const { data, error: e } = await supabase()
+      .from('board')
+      .select('week_start, sessions, piano, ttrs')
+      .eq('token', k)
+      .order('week_start');
+    if (e) {
+      setError(e.message);
+      return;
+    }
+    const list: WeekRow[] = (data ?? []).map((r) => ({
+      week_start: r.week_start as string,
+      sessions: five(r.sessions),
+      piano: five(r.piano),
+      ttrs: five(r.ttrs),
+    }));
+    if (!list.some((r) => r.week_start === week)) list.push(blank(week));
+    setError(null);
+    setRows(list);
+  }, []);
 
   useEffect(() => {
     const k = new URLSearchParams(window.location.search).get('k');
@@ -64,30 +105,32 @@ export default function Board() {
       setLoading(false);
       return;
     }
-    (async () => {
-      const { data, error: e } = await supabase()
-        .from('board')
-        .select('week_start, sessions, mornings')
-        .eq('token', k)
-        .order('week_start');
-      if (e) {
-        setError(e.message);
-      } else {
-        const list: WeekRow[] = (data ?? []).map((r) => ({
-          week_start: r.week_start as string,
-          sessions: five(r.sessions),
-          mornings: five(r.mornings),
-        }));
-        if (!list.some((r) => r.week_start === thisWeek)) {
-          list.push({ week_start: thisWeek, sessions: [...FIVE], mornings: [...FIVE] });
-        }
-        setRows(list);
+    void load(k, thisWeek).then(() => setLoading(false));
+  }, [load, thisWeek]);
+
+  // Automation: if the tab is left open across midnight, or she comes back to
+  // it on Monday, roll the week over without anybody reloading anything.
+  useEffect(() => {
+    function check() {
+      const now = mondayOf(new Date());
+      if (now !== thisWeek) {
+        setThisWeek(now);
+        setRows((prev) => (prev.some((r) => r.week_start === now) ? prev : [...prev, blank(now)]));
       }
-      setLoading(false);
-    })();
+    }
+    const id = window.setInterval(check, 60000);
+    window.addEventListener('focus', check);
+    document.addEventListener('visibilitychange', check);
+    return () => {
+      window.clearInterval(id);
+      window.removeEventListener('focus', check);
+      document.removeEventListener('visibilitychange', check);
+    };
   }, [thisWeek]);
 
   const current = rows.find((r) => r.week_start === thisWeek);
+  const done = current ? current.sessions.filter(Boolean).length : 0;
+  const full = done === 5;
 
   const save = useCallback(
     async (row: WeekRow) => {
@@ -96,7 +139,13 @@ export default function Board() {
       const { error: e } = await supabase()
         .from('board')
         .upsert(
-          { token, week_start: row.week_start, sessions: row.sessions, mornings: row.mornings },
+          {
+            token,
+            week_start: row.week_start,
+            sessions: row.sessions,
+            piano: row.piano,
+            ttrs: row.ttrs,
+          },
           { onConflict: 'token,week_start' }
         );
       if (e) {
@@ -105,17 +154,22 @@ export default function Board() {
       } else {
         setError(null);
         setNote('saved');
-        setTimeout(() => setNote(''), 1600);
+        window.setTimeout(() => setNote(''), 1500);
       }
     },
     [token]
   );
 
-  function toggle(kind: 'sessions' | 'mornings', i: number) {
+  function toggle(kind: Strand, i: number) {
     setRows((prev) => {
       const next = prev.map((r) => {
         if (r.week_start !== thisWeek) return r;
-        const copy = { ...r, sessions: [...r.sessions], mornings: [...r.mornings] };
+        const copy: WeekRow = {
+          ...r,
+          sessions: [...r.sessions],
+          piano: [...r.piano],
+          ttrs: [...r.ttrs],
+        };
         copy[kind][i] = !copy[kind][i];
         return copy;
       });
@@ -139,100 +193,120 @@ export default function Board() {
     );
   }
 
-  const done = current ? current.sessions.filter(Boolean).length : 0;
-  const full = done === 5;
-  const earned = rows.filter((r) => r.sessions.filter(Boolean).length === 5).length;
+  const earnedWeeks = rows.filter((r) => r.sessions.filter(Boolean).length === 5);
 
   return (
-    <div className="wrap">
-      <div className="boardhead">
-        <span className="lbl">
-          Week of {pretty(thisWeek)} to {pretty(thisWeek, 6)}
-        </span>
-        <h1>Murphy&rsquo;s board</h1>
-      </div>
+    <div className="bp">
+      <div className="bwrap">
+        <header className="bhead">
+          <p className="bkicker">{pretty(thisWeek)} to {pretty(thisWeek, 6)}</p>
+          <h1>
+            {hello}
+            <br />
+            <span>Murphy&rsquo;s week</span>
+          </h1>
+          <div className="bpips" aria-label={`${done} of 5 done`}>
+            {[0, 1, 2, 3, 4].map((i) => (
+              <span key={i} className={i < done ? 'on' : ''} />
+            ))}
+          </div>
+        </header>
 
-      {error ? (
-        <div className="card tight" style={{ borderLeft: '3px solid var(--red)' }}>
-          <b>That tick did not save.</b>
-          <p className="muted" style={{ margin: '4px 0 0' }}>{error}</p>
-        </div>
-      ) : null}
+        {error ? (
+          <div className="berr">
+            <b>That tick did not save.</b>
+            <span>{error}</span>
+          </div>
+        ) : null}
 
-      <div className="bticks">
-        {SESSIONS.map((s, i) => (
-          <button
-            key={i}
-            className="btick"
-            aria-pressed={current?.sessions[i] ? 'true' : 'false'}
-            onClick={() => toggle('sessions', i)}
-          >
-            <span className="bbox" aria-hidden="true">
-              <svg viewBox="0 0 20 20">
-                <path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </span>
-            <span className="blabel">
-              <span className="bday">
-                {s.day}, {s.when}
-              </span>
-              <span className="bwhat">{s.what}</span>
-            </span>
-          </button>
-        ))}
-      </div>
-
-      <div className={`bstatus${full ? ' full' : ''}`}>
-        {full ? (
-          <>
-            <b>That is the week. Print earned.</b>
-            <span className="muted">It stays earned whatever happens next.</span>
-          </>
-        ) : (
-          <>
-            <b>{done} of 5</b>
-            <span className="muted">All five and the week earns a print.</span>
-          </>
-        )}
-        <span className="bsave">{note}</span>
-      </div>
-
-      <div className="bsection">
-        <span className="lbl">Mornings, not counted</span>
-        <div className="bmorn">
-          {MORNINGS.map((d, i) => (
-            <button
-              key={d}
-              className="bm"
-              aria-pressed={current?.mornings[i] ? 'true' : 'false'}
-              onClick={() => toggle('mornings', i)}
-            >
-              <span className="bmd">{d}</span>
-              <span className="bmdot" aria-hidden="true" />
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="bsection">
-        <span className="lbl">Prints earned: {earned}</span>
-        <div className="brun">
-          {rows.map((r) => {
-            const c = r.sessions.filter(Boolean).length === 5;
+        <div className="bcards">
+          {SESSIONS.map((s, i) => {
+            const on = !!current?.sessions[i];
             return (
-              <div
-                key={r.week_start}
-                className={`bcell${c ? ' on' : ''}${r.week_start === thisWeek ? ' now' : ''}`}
-                title={pretty(r.week_start)}
+              <button
+                key={i}
+                className={`bcard h-${s.hue}${on ? ' on' : ''}`}
+                aria-pressed={on}
+                onClick={() => toggle('sessions', i)}
               >
-                {pretty(r.week_start)}
-              </div>
+                <span className="bring" aria-hidden="true">
+                  <span className="bringday">{s.day}</span>
+                  <svg viewBox="0 0 24 24">
+                    <path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+                <span className="btext">
+                  <span className="bwhen">{s.when}</span>
+                  <span className="bwhat">{s.what}</span>
+                </span>
+              </button>
             );
           })}
         </div>
-        <p className="muted" style={{ fontSize: 13.5, marginTop: 10 }}>
-          Nothing here ever comes off.
-        </p>
+
+        <div className={`bbig${full ? ' full' : ''}`}>
+          {full ? (
+            <>
+              <strong>All five. That is a print.</strong>
+              <span>It stays yours whatever happens next.</span>
+            </>
+          ) : (
+            <>
+              <strong>{5 - done} to go</strong>
+              <span>Five fills the week and earns a print.</span>
+            </>
+          )}
+          <span className="bsave">{note}</span>
+        </div>
+
+        <section className="bhabits">
+          <h2>Mornings</h2>
+          <p>These do not count towards the print. Tick them anyway.</p>
+          <div className="bgrid">
+            <span className="brow-label">Piano</span>
+            {DAYS.map((d, i) => (
+              <button
+                key={`p${d}`}
+                className={`bpill piano${current?.piano[i] ? ' on' : ''}${i === todayIdx ? ' today' : ''}`}
+                aria-pressed={!!current?.piano[i]}
+                aria-label={`Piano, ${d}`}
+                onClick={() => toggle('piano', i)}
+              >
+                {d}
+              </button>
+            ))}
+            <span className="brow-label">Rock Stars</span>
+            {DAYS.map((d, i) => (
+              <button
+                key={`t${d}`}
+                className={`bpill ttrs${current?.ttrs[i] ? ' on' : ''}${i === todayIdx ? ' today' : ''}`}
+                aria-pressed={!!current?.ttrs[i]}
+                aria-label={`Times Tables Rock Stars, ${d}`}
+                onClick={() => toggle('ttrs', i)}
+              >
+                {d}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section className="bhabits">
+          <h2>Prints earned: {earnedWeeks.length}</h2>
+          <p>Nothing here ever comes off.</p>
+          <div className="btokens">
+            {rows.map((r) => {
+              const c = r.sessions.filter(Boolean).length === 5;
+              return (
+                <span
+                  key={r.week_start}
+                  className={`btok${c ? ' on' : ''}${r.week_start === thisWeek ? ' now' : ''}`}
+                >
+                  {pretty(r.week_start)}
+                </span>
+              );
+            })}
+          </div>
+        </section>
       </div>
     </div>
   );

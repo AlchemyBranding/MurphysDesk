@@ -259,60 +259,93 @@ label.field { display: block; margin-bottom: 14px; }
 .videoagain:hover { color: var(--copper); border-bottom-color: var(--copper); }
 
 /* ---------------------------------------------------------------- the board
-   A no-login page she opens on the iPad each morning. Big targets, nothing
-   that can decrease, and no number anywhere that rates her. */
+   The no-login page at /board?k=<token>. Deliberately plain: this is the base
+   layer, and the look is being taken elsewhere. Big targets, one accent per
+   session, and no number anywhere that rates her. */
 
-.boardhead { padding: 34px 0 20px; border-bottom: 1px solid var(--rule); margin-bottom: 22px; }
-.boardhead h1 { font-family: var(--font-display), serif; font-size: clamp(30px, 6vw, 42px); margin: 6px 0 0; letter-spacing: -0.015em; }
+.bp { --a: #2e6b4c; --b: #35566b; --c: #6b3a56; --d: #a0651f; --e: #4a6b2e; }
+.bwrap { max-width: 720px; margin: 0 auto; padding: 0 20px 80px; }
 
-.bticks { display: grid; gap: 10px; }
-.btick {
+.bhead { padding: 36px 0 22px; }
+.bkicker { font-family: var(--font-mono), monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 0; }
+.bhead h1 { font-family: var(--font-display), serif; font-size: clamp(30px, 7vw, 44px); line-height: 1.08; margin: 8px 0 0; letter-spacing: -0.015em; }
+.bhead h1 span { color: var(--green); }
+.bpips { display: flex; gap: 7px; margin-top: 18px; }
+.bpips span { width: 34px; height: 8px; border-radius: 99px; background: var(--card-2); border: 1px solid var(--rule); }
+.bpips span.on { background: var(--green); border-color: var(--green); }
+
+.berr {
+  display: grid; gap: 3px; margin-bottom: 16px; padding: 14px 16px;
+  border: 1px solid var(--red); border-left-width: 3px; border-radius: var(--radius);
+  background: var(--red-soft); font-size: 14px;
+}
+
+.bcards { display: grid; gap: 10px; }
+.bcard {
   display: flex; align-items: center; gap: 16px; width: 100%; text-align: left;
-  background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius);
-  padding: 14px 16px; min-height: 68px; cursor: pointer; font: inherit; color: inherit;
-  -webkit-tap-highlight-color: transparent;
+  padding: 14px 18px 14px 14px; min-height: 76px; cursor: pointer;
+  font: inherit; color: inherit; -webkit-tap-highlight-color: transparent;
+  background: var(--card); border: 1px solid var(--rule);
+  border-left: 4px solid var(--accent); border-radius: var(--radius);
 }
-.btick[aria-pressed='true'] { background: var(--green-soft); border-color: var(--green); }
-.bbox {
-  flex: 0 0 auto; width: 32px; height: 32px; border: 2px solid var(--ink-3);
-  border-radius: 4px; display: flex; align-items: center; justify-content: center;
-  color: var(--onaccent);
-}
-.btick[aria-pressed='true'] .bbox { background: var(--green); border-color: var(--green); }
-.bbox svg { width: 20px; height: 20px; display: none; }
-.btick[aria-pressed='true'] .bbox svg { display: block; }
-.blabel { display: block; }
-.bday { display: block; font-family: var(--font-mono), monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
-.bwhat { display: block; font-family: var(--font-display), serif; font-size: 18px; margin-top: 2px; }
+.bcard.h-a { --accent: var(--a); }
+.bcard.h-b { --accent: var(--b); }
+.bcard.h-c { --accent: var(--c); }
+.bcard.h-d { --accent: var(--d); }
+.bcard.h-e { --accent: var(--e); }
+.bcard.on { background: var(--green-soft); border-color: var(--green); border-left-color: var(--accent); }
 
-.bstatus {
-  margin-top: 16px; padding: 16px 18px; border: 1px solid var(--rule);
-  border-radius: var(--radius); background: var(--card);
-  display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline;
+.bring {
+  position: relative; flex: 0 0 auto; width: 46px; height: 46px; border-radius: 50%;
+  border: 2px solid var(--accent); color: var(--onaccent);
+  display: flex; align-items: center; justify-content: center;
 }
-.bstatus.full { background: var(--green-soft); border-color: var(--green); }
-.bstatus b { font-family: var(--font-display), serif; font-size: 20px; font-weight: 600; }
+.bringday { font-family: var(--font-mono), monospace; font-size: 12px; color: var(--accent); }
+.bring svg { position: absolute; width: 26px; height: 26px; display: none; }
+.bcard.on .bring { background: var(--accent); }
+.bcard.on .bringday { display: none; }
+.bcard.on .bring svg { display: block; }
+
+.btext { display: block; min-width: 0; }
+.bwhen { display: block; font-family: var(--font-mono), monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.bwhat { display: block; font-family: var(--font-display), serif; font-size: 19px; margin-top: 3px; }
+
+.bbig {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px;
+  margin-top: 16px; padding: 18px; border-radius: var(--radius);
+  border: 1px solid var(--rule); background: var(--card);
+}
+.bbig.full { background: var(--green-soft); border-color: var(--green); }
+.bbig strong { font-family: var(--font-display), serif; font-size: 21px; font-weight: 600; }
+.bbig span { color: var(--ink-2); font-size: 14.5px; }
 .bsave { margin-left: auto; font-family: var(--font-mono), monospace; font-size: 12px; color: var(--ink-3); }
 
-.bsection { margin-top: 30px; }
-.bmorn { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.bm {
-  flex: 1 1 90px; min-width: 90px; min-height: 66px; padding: 12px 8px;
-  background: var(--card-2); border: 1px solid var(--rule); border-radius: var(--radius);
-  cursor: pointer; font: inherit; color: inherit; text-align: center;
-  -webkit-tap-highlight-color: transparent;
-}
-.bm[aria-pressed='true'] { border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); }
-.bmd { display: block; font-family: var(--font-mono), monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
-.bmdot { display: block; width: 14px; height: 14px; margin: 10px auto 0; border-radius: 50%; border: 2px solid var(--ink-3); }
-.bm[aria-pressed='true'] .bmdot { background: var(--green); border-color: var(--green); }
+.bhabits { margin-top: 36px; }
+.bhabits h2 { font-family: var(--font-display), serif; font-size: 20px; margin: 0; }
+.bhabits p { color: var(--ink-2); font-size: 14px; margin: 4px 0 14px; }
 
-.brun { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.bcell {
-  min-width: 58px; padding: 10px 8px; border-radius: var(--radius);
+.bgrid { display: grid; grid-template-columns: auto repeat(5, 1fr); gap: 8px; align-items: center; }
+.brow-label { font-family: var(--font-mono), monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); padding-right: 6px; }
+.bpill {
+  min-height: 52px; padding: 8px 4px; border-radius: var(--radius);
   border: 1px solid var(--rule); background: var(--card-2);
-  font-family: var(--font-mono), monospace; font-size: 11.5px; color: var(--ink-3);
-  text-align: center;
+  font-family: var(--font-mono), monospace; font-size: 12px; color: var(--ink-3);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
-.bcell.on { background: var(--green); border-color: var(--green); color: var(--onaccent); }
-.bcell.now { outline: 2px solid var(--green); outline-offset: 2px; }
+.bpill.today { border-color: var(--ink-3); }
+.bpill.piano.on { background: var(--plum); border-color: var(--plum); color: var(--onaccent); }
+.bpill.ttrs.on { background: var(--b); border-color: var(--b); color: var(--onaccent); }
+
+.btokens { display: flex; flex-wrap: wrap; gap: 6px; }
+.btok {
+  padding: 9px 10px; border-radius: var(--radius); border: 1px solid var(--rule);
+  background: var(--card-2); font-family: var(--font-mono), monospace;
+  font-size: 11.5px; color: var(--ink-3);
+}
+.btok.on { background: var(--green); border-color: var(--green); color: var(--onaccent); }
+.btok.now { outline: 2px solid var(--green); outline-offset: 2px; }
+
+@media (max-width: 420px) {
+  .bgrid { grid-template-columns: repeat(5, 1fr); }
+  .brow-label { grid-column: 1 / -1; padding: 6px 0 0; }
+}
