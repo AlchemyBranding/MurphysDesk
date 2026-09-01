@@ -257,3 +257,62 @@ label.field { display: block; margin-bottom: 14px; }
   margin-bottom: 12px;
 }
 .videoagain:hover { color: var(--copper); border-bottom-color: var(--copper); }
+
+/* ---------------------------------------------------------------- the board
+   A no-login page she opens on the iPad each morning. Big targets, nothing
+   that can decrease, and no number anywhere that rates her. */
+
+.boardhead { padding: 34px 0 20px; border-bottom: 1px solid var(--rule); margin-bottom: 22px; }
+.boardhead h1 { font-family: var(--font-display), serif; font-size: clamp(30px, 6vw, 42px); margin: 6px 0 0; letter-spacing: -0.015em; }
+
+.bticks { display: grid; gap: 10px; }
+.btick {
+  display: flex; align-items: center; gap: 16px; width: 100%; text-align: left;
+  background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius);
+  padding: 14px 16px; min-height: 68px; cursor: pointer; font: inherit; color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.btick[aria-pressed='true'] { background: var(--green-soft); border-color: var(--green); }
+.bbox {
+  flex: 0 0 auto; width: 32px; height: 32px; border: 2px solid var(--ink-3);
+  border-radius: 4px; display: flex; align-items: center; justify-content: center;
+  color: var(--onaccent);
+}
+.btick[aria-pressed='true'] .bbox { background: var(--green); border-color: var(--green); }
+.bbox svg { width: 20px; height: 20px; display: none; }
+.btick[aria-pressed='true'] .bbox svg { display: block; }
+.blabel { display: block; }
+.bday { display: block; font-family: var(--font-mono), monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.bwhat { display: block; font-family: var(--font-display), serif; font-size: 18px; margin-top: 2px; }
+
+.bstatus {
+  margin-top: 16px; padding: 16px 18px; border: 1px solid var(--rule);
+  border-radius: var(--radius); background: var(--card);
+  display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline;
+}
+.bstatus.full { background: var(--green-soft); border-color: var(--green); }
+.bstatus b { font-family: var(--font-display), serif; font-size: 20px; font-weight: 600; }
+.bsave { margin-left: auto; font-family: var(--font-mono), monospace; font-size: 12px; color: var(--ink-3); }
+
+.bsection { margin-top: 30px; }
+.bmorn { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.bm {
+  flex: 1 1 90px; min-width: 90px; min-height: 66px; padding: 12px 8px;
+  background: var(--card-2); border: 1px solid var(--rule); border-radius: var(--radius);
+  cursor: pointer; font: inherit; color: inherit; text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.bm[aria-pressed='true'] { border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); }
+.bmd { display: block; font-family: var(--font-mono), monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.bmdot { display: block; width: 14px; height: 14px; margin: 10px auto 0; border-radius: 50%; border: 2px solid var(--ink-3); }
+.bm[aria-pressed='true'] .bmdot { background: var(--green); border-color: var(--green); }
+
+.brun { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.bcell {
+  min-width: 58px; padding: 10px 8px; border-radius: var(--radius);
+  border: 1px solid var(--rule); background: var(--card-2);
+  font-family: var(--font-mono), monospace; font-size: 11.5px; color: var(--ink-3);
+  text-align: center;
+}
+.bcell.on { background: var(--green); border-color: var(--green); color: var(--onaccent); }
+.bcell.now { outline: 2px solid var(--green); outline-offset: 2px; }
