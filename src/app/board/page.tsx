@@ -1,6 +1,8 @@
 'use client';
 
-// Murphy's board — sticker-book redesign.
+// MURPH'S BOARD — sticker-book redesign.
+// File: src/app/board/page.tsx   (route: /board?k=<murph's token>)
+// Needs: public/board/murph-hero.png
 //
 // Same rules as before, nothing loosened:
 //   - five sessions carry the week, flat. Nothing is scaled to how well she did
@@ -20,7 +22,7 @@ const SESSIONS = [
   { day: 'Tue', when: 'after piano', what: 'CENTURY' },
   { day: 'Wed', when: 'after school', what: 'CENTURY' },
   { day: 'Sat', when: 'or Sunday', what: 'CENTURY' },
-  { day: 'Sun', when: 'with Dad', what: 'Money and thinking' },
+  { day: 'Sun', when: 'with Dad or Mum', what: 'Money and thinking' },
 ];
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 const FIVE = [false, false, false, false, false];
@@ -33,14 +35,6 @@ const TTRS_ON = '#ffc4bb';
 const INK = '#17150f';
 const PAPER = '#fdf6e8';
 const MUTED = '#8a7f6b';
-
-// One board per child. Each token is a separate set of rows in the same table,
-// so neither page can see the other's, which is deliberate: no comparison
-// between them, ever.
-const LEARNERS: Record<string, string> = {
-  '3521be1922540bb6b9daff9b': 'Murph',
-  'c7e04a8f5b2d16094ea3fd71': 'Max',
-};
 
 const LINES = [
   'Blank week. Nice and quiet.',
@@ -109,8 +103,6 @@ export default function Board() {
   const [loading, setLoading] = useState(true);
   const [note, setNote] = useState('');
   const [error, setError] = useState<string | null>(null);
-
-  const name = token ? (LEARNERS[token] ?? 'you') : 'you';
 
   const todayIdx = useMemo(() => {
     const d = new Date().getDay();
@@ -275,6 +267,49 @@ export default function Board() {
           </svg>
         </div>
 
+        <div
+          style={{
+            position: 'relative',
+            overflow: 'hidden',
+            height: 300,
+            marginBottom: 20,
+            border: `3px solid ${INK}`,
+            borderRadius: 18,
+            background: '#f4ecd8',
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/board/murph-hero.png"
+            alt="Murph"
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 24%' }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(180deg, rgba(253,246,232,0) 55%, rgba(253,246,232,.9) 100%)',
+            }}
+          />
+          <span
+            style={{
+              position: 'absolute',
+              bottom: 12,
+              left: 14,
+              padding: '5px 11px',
+              border: `3px solid ${INK}`,
+              borderRadius: 999,
+              background: '#ffe3ad',
+              fontFamily: "'Baloo 2', cursive",
+              fontSize: 15,
+              fontWeight: 800,
+              color: INK,
+            }}
+          >
+            Ice cream earned
+          </span>
+        </div>
+
         <header style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
           <div className="mb-bob" style={{ flex: 'none' }} aria-hidden="true">
             <svg width="62" height="62" viewBox="0 0 62 62">
@@ -293,7 +328,7 @@ export default function Board() {
             <h1 style={title}>
               Here we go,
               <br />
-              {name}
+              Murph
             </h1>
           </div>
         </header>
