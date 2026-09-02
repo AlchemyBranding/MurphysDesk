@@ -34,6 +34,14 @@ const INK = '#17150f';
 const PAPER = '#fdf6e8';
 const MUTED = '#8a7f6b';
 
+// One board per child. Each token is a separate set of rows in the same table,
+// so neither page can see the other's, which is deliberate: no comparison
+// between them, ever.
+const LEARNERS: Record<string, string> = {
+  '3521be1922540bb6b9daff9b': 'Murph',
+  'c7e04a8f5b2d16094ea3fd71': 'Max',
+};
+
 const LINES = [
   'Blank week. Nice and quiet.',
   'One down. That was the hard one.',
@@ -101,6 +109,8 @@ export default function Board() {
   const [loading, setLoading] = useState(true);
   const [note, setNote] = useState('');
   const [error, setError] = useState<string | null>(null);
+
+  const name = token ? (LEARNERS[token] ?? 'you') : 'you';
 
   const todayIdx = useMemo(() => {
     const d = new Date().getDay();
@@ -283,7 +293,7 @@ export default function Board() {
             <h1 style={title}>
               Here we go,
               <br />
-              Murph
+              {name}
             </h1>
           </div>
         </header>
